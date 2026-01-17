@@ -1,6 +1,6 @@
 --[[ 
-    🌟 MANO GUSTAVO UI - DIAMOND EDITION (V7.9 - Ultimate)
-    [Updates: Sections, Save/Load, Tooltips, Callback Hooks, Theme System]
+    🌟 MANO GUSTAVO UI - DIAMOND EDITION (V7.9.1 - BugFix)
+    [Updates: Fixed Section Titles not updating color on Theme Change]
 ]]
 
 return (function()
@@ -176,7 +176,6 @@ return (function()
     
     function Lib:ResetConfig()
         if not isfolder(ConfigFolder) then return end
-        -- Limpa visualmente (apenas para coisas básicas ou reseta Flags internas)
         Lib.Flags = {}
     end
 
@@ -239,13 +238,13 @@ return (function()
         local SearchBarBG = CreateInstance("Frame", {Parent=Topbar, BackgroundColor3=Color3.fromRGB(40,40,40), Position=UDim2.new(1,-60,0,4), Size=UDim2.new(0,0,0,26), BackgroundTransparency=0.2, ClipsDescendants=true, Visible=false}); CreateInstance("UICorner", {Parent=SearchBarBG, CornerRadius=UDim.new(0,5)})
         local SearchInput = CreateInstance("TextBox", {Parent=SearchBarBG, BackgroundTransparency=1, Position=UDim2.new(0,5,0,0), Size=UDim2.new(1,-10,1,0), Text="", PlaceholderText="Search...", Font=UIConfig.Font, TextSize=13, TextColor3=Color3.new(1,1,1), TextXAlignment=0})
         
-        local PageHolder -- Defined later
+        local PageHolder
         local function DoSearch(text)
             text = text:lower()
             if not PageHolder then return end
             for _, page in pairs(PageHolder:GetChildren()) do
                 if page.Visible then
-                    for _, item in pairs(page:GetDescendants()) do -- Changed to Descendants for Sections
+                    for _, item in pairs(page:GetDescendants()) do 
                         if item:IsA("TextButton") or item:IsA("Frame") then
                             if item:GetAttribute("IsElement") then
                                 local label = item:FindFirstChildWhichIsA("TextLabel")
@@ -289,10 +288,6 @@ return (function()
             if First then TabBtn.TextColor3=UIConfig.TextColor; Indicator.Transparency=0; Page.Visible=true; First=false end
 
             local ContainerFuncs = {}
-            -- Internal generator to work with both Pages and Sections
-            local function AddElement(ParentFrame, Text, IsButton)
-                -- ... implementation detail implied
-            end
 
             -- // ELEMENTS GENERATOR //
             local function GetElemTable(Container) 
@@ -302,7 +297,9 @@ return (function()
                     local SectionFrame = CreateInstance("Frame", {Parent=Container, BackgroundColor3=UIConfig.SectionColor, Size=UDim2.new(1,0,0,0), AutomaticSize=Enum.AutomaticSize.Y, BackgroundTransparency=0.5}); CreateInstance("UICorner", {Parent=SectionFrame, CornerRadius=UDim.new(0,6)}); AddThemeObject(SectionFrame, "BackgroundColor3", "Section")
                     local SecStroke = CreateInstance("UIStroke", {Parent=SectionFrame, Color=UIConfig.StrokeColor, Thickness=1, Transparency=0.8}); AddThemeObject(SecStroke, "Color", "Stroke")
                     
-                    CreateInstance("TextLabel", {Parent=SectionFrame, Text="  "..Txt, Size=UDim2.new(1,0,0,24), BackgroundTransparency=1, TextXAlignment=0, TextColor3=UIConfig.AccentColor, Font=Enum.Font.GothamBold, TextSize=12}); 
+                    local SecTitle = CreateInstance("TextLabel", {Parent=SectionFrame, Text="  "..Txt, Size=UDim2.new(1,0,0,24), BackgroundTransparency=1, TextXAlignment=0, TextColor3=UIConfig.AccentColor, Font=Enum.Font.GothamBold, TextSize=12});
+                    AddThemeObject(SecTitle, "TextColor3", "Accent") -- CORREÇÃO APLICADA AQUI
+                    
                     local Content = CreateInstance("Frame", {Parent=SectionFrame, BackgroundTransparency=1, Size=UDim2.new(1,0,0,0), AutomaticSize=Enum.AutomaticSize.Y, Position=UDim2.new(0,0,0,26)}); CreateInstance("UIListLayout", {Parent=Content, SortOrder=Enum.SortOrder.LayoutOrder, Padding=UDim.new(0,6)}); CreateInstance("UIPadding", {Parent=Content, PaddingBottom=UDim.new(0,6), PaddingLeft=UDim.new(0,6), PaddingRight=UDim.new(0,6)})
                     return GetElemTable(Content)
                 end
@@ -537,38 +534,3 @@ return (function()
 
     return Lib
 end)()
-
---[[
-    --- DOCUMENTAÇÃO ATUALIZADA (V7.9) ---
-    
-    1. CARREGAMENTO (GitHub Load):
-       loadstring(game:HttpGet("SEU_LINK_RAW_DO_GITHUB"))()
-    
-    2. NOVOS RECURSOS:
-    
-       [Seções / Grupos]
-       Local Tab = Window:CreateTab("Main")
-       local FarmSection = Tab:CreateSection("Farming Tools")
-       FarmSection:CreateButton("Ativar Farm", ...)
-       FarmSection:CreateToggle(...)
-    
-       [Configuração Save/Load]
-       *Nota: Funciona automatico para Toggles, Sliders, Dropdowns e Colors se eles tiverem Nomes Unicos na aba.*
-       Library:SaveConfig("MinhaConfig")
-       Library:LoadConfig("MinhaConfig")
-    
-       [Tooltips]
-       local Botao = Tab:CreateButton(...)
-       Botao:SetTooltip("Este botão faz XYZ quando clicado.")
-    
-       [Hooks para Toggles]
-       local Toggle = Tab:CreateToggle("Auto Click", function(s) end)
-       Toggle:OnEnable(function() print("Ligou!") end)
-       Toggle:OnDisable(function() print("Desligou!") end)
-       
-       [Temas]
-       Library:SetTheme({
-          MainColor = Color3.fromRGB(20, 20, 20),
-          AccentColor = Color3.fromRGB(255, 50, 50)
-       })
-]]
