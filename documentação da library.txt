@@ -1,0 +1,290 @@
+# DOCUMENTAÇÃO OFICIAL E AVANÇADA — MANO GUSTAVO UI LIBRARY (V7.6)
+
+Esta documentação foi criada para **humanos e IAs**.
+O objetivo é explicar **tudo o que a library suporta**, **como cada componente funciona** e **como modificar ou expandir o menu corretamente**, sem quebrar nada.
+
+Esta library foi projetada para ser:
+
+* Modular
+* Reutilizável
+* Fácil de manter
+* Carregada externamente via GitHub
+
+============================================================
+
+1. COMO CARREGAR A LIBRARY (OBRIGATÓRIO)
+
+---
+
+A Mano Gustavo UI Library deve ser carregada externamente para evitar scripts grandes.
+
+Código oficial de carregamento:
+
+local Library = loadstring(game:HttpGet(
+"https://raw.githubusercontent.com/Mano-Gustavo/Mano-Gustavo-Library/refs/heads/main/library.lua"
+))()
+
+IMPORTANTE:
+
+* A library SEMPRE retorna uma tabela
+* Se Library for nil, o script não foi carregado corretamente
+
+============================================================
+
+2. ESTRUTURA GERAL DA LIBRARY
+
+---
+
+A library expõe uma tabela principal chamada `Library`.
+
+Funções principais:
+
+* Library:CreateWindow()
+* Window:CreateTab()
+* Tab:CreateButton()
+* Tab:CreateToggle()
+* Tab:CreateSlider()
+* Tab:CreateDropdown()
+* Tab:CreateTextBox()
+* Tab:CreateLabel()
+* Tab:CreateColorPicker()
+* Library:Notification()
+
+Toda a UI é criada seguindo esta hierarquia:
+
+Library
+└── Window
+└── Tabs
+└── Components
+
+============================================================
+
+3. WINDOW (JANELA PRINCIPAL)
+
+---
+
+A janela é o container principal do menu.
+
+Uso:
+
+local Window = Library:CreateWindow({
+Title = "Menu Title",
+Author = "Author Name",
+Keybind = Enum.KeyCode.RightControl
+})
+
+Parâmetros:
+
+* Title (string): Nome do menu
+* Author (string): Nome do autor (opcional)
+* Keybind (Enum.KeyCode): Tecla para abrir/fechar
+
+Suporte:
+
+* PC (tecla)
+* Mobile (botão flutuante arrastável)
+
+============================================================
+
+4. TABS (CATEGORIAS)
+
+---
+
+Tabs servem para organizar funcionalidades.
+
+Uso:
+
+local Tab = Window:CreateTab("Category Name")
+
+Tudo criado usando a variável da tab pertence a ela.
+
+============================================================
+
+5. COMPONENTES SUPORTADOS
+
+---
+
+Abaixo estão TODOS os componentes suportados atualmente pela library.
+
+---
+
+## A) BUTTON
+
+Uso:
+
+Tab:CreateButton("Button Name", function()
+-- Código executado ao clicar
+end)
+
+Uso recomendado:
+
+* Ações únicas
+* Teleports
+* Testes
+
+---
+
+## B) TOGGLE
+
+Uso:
+
+Tab:CreateToggle("Toggle Name", function(State)
+-- State = true / false
+end, false)
+
+Uso recomendado:
+
+* ESP
+* Hitbox
+* Auto Farm
+
+---
+
+## C) SLIDER
+
+Uso:
+
+Tab:CreateSlider("Slider Name", Min, Max, Default, function(Value)
+end)
+
+Uso recomendado:
+
+* Tamanho
+* Velocidade
+* Distância
+
+---
+
+## D) DROPDOWN
+
+Uso:
+
+Tab:CreateDropdown("Dropdown Name", {"Option1", "Option2"}, function(Selected)
+end)
+
+Uso recomendado:
+
+* Seleção de modos
+* Escolha de alvo
+
+---
+
+## E) TEXTBOX
+
+Uso:
+
+Tab:CreateTextBox("Textbox Name", "Placeholder", function(Text)
+end)
+
+Uso recomendado:
+
+* Nome de player
+* Valores manuais
+
+---
+
+## F) LABEL
+
+Uso:
+
+Tab:CreateLabel("--- Section Name ---")
+
+Uso recomendado:
+
+* Separação visual
+* Organização
+
+---
+
+## G) COLOR PICKER (RGB)
+
+Uso:
+
+Tab:CreateColorPicker("Color Name", Color3.fromRGB(255,0,0), function(Color)
+end)
+
+Retorno:
+
+* Color3
+* Atualização em tempo real
+
+Uso recomendado:
+
+* ESP
+* Chams
+* Hitbox
+* UI Visuals
+
+============================================================
+
+6. SISTEMA DE NOTIFICAÇÕES
+
+---
+
+Uso:
+
+Library:Notification({
+Title = "Title",
+Text = "Message",
+Duration = 5,
+Type = "Info"
+})
+
+Tipos suportados:
+
+* Success
+* Warning
+* Error
+* Info
+
+============================================================
+
+7. SISTEMA DE PESQUISA (LUPA)
+
+---
+
+A library possui um sistema de busca interno.
+
+Suporte:
+
+* Buttons
+* Toggles
+* Sliders
+* Dropdowns
+* TextBox
+* Color Picker
+* Labels
+
+A pesquisa funciona apenas na aba ativa.
+
+============================================================
+
+8. BOAS PRÁTICAS PARA HUMANOS E IAs
+
+---
+
+* Sempre use a library externa
+* Nunca recrie a UI manualmente
+* Use Labels para organização
+* Evite loops sem task.wait()
+* Limpe objetos ao desativar toggles
+* Não crie instâncias duplicadas
+
+============================================================
+
+9. O QUE A LIBRARY SUPORTA
+
+---
+
+* Scripts grandes
+* Hubs completos
+* Player + NPC systems
+* ESP
+* Hitbox
+* Chams
+* Visual customization
+* Mobile + PC
+
+============================================================
+
+# FIM DA DOCUMENTAÇÃO OFICIAL
