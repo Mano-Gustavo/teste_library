@@ -1,290 +1,253 @@
-# DOCUMENTAÇÃO OFICIAL E AVANÇADA — MANO GUSTAVO UI LIBRARY (V7.6)
+💎 MANO GUSTAVO UI FRAMEWORK
+Diamond Edition — V8.0 (Hybrid Hub Framework)
 
-Esta documentação foi criada para **humanos e IAs**.
-O objetivo é explicar **tudo o que a library suporta**, **como cada componente funciona** e **como modificar ou expandir o menu corretamente**, sem quebrar nada.
+Uma library moderna, modular e profissional para criação de scripts simples e Hubs multi-jogos, com suporte a Key System, Game Hub, Configs, Temas e Componentes avançados.
 
-Esta library foi projetada para ser:
+⚠️ Esta library é HÍBRIDA
+Ela pode ser usada tanto para scripts simples quanto para Hubs completos.
+Nada é obrigatório: você usa apenas o que quiser.
 
-* Modular
-* Reutilizável
-* Fácil de manter
-* Carregada externamente via GitHub
+📥 [1] INSTALAÇÃO (LOADER VIA GITHUB)
 
-============================================================
+A library é carregada remotamente, evitando scripts gigantes.
 
-1. COMO CARREGAR A LIBRARY (OBRIGATÓRIO)
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Mano-Gustavo/Mano-Gustavo-Library/refs/heads/main/library.lua"))()
 
----
 
-A Mano Gustavo UI Library deve ser carregada externamente para evitar scripts grandes.
+✅ Vantagens:
 
-Código oficial de carregamento:
+Script final fica muito menor
 
-local Library = loadstring(game:HttpGet(
-"https://raw.githubusercontent.com/Mano-Gustavo/Mano-Gustavo-Library/refs/heads/main/library.lua"
-))()
+Atualizações automáticas
 
-IMPORTANTE:
+Organização profissional
 
-* A library SEMPRE retorna uma tabela
-* Se Library for nil, o script não foi carregado corretamente
+🔐 [2] SISTEMA DE KEY (OPCIONAL)
 
-============================================================
+Usado apenas se você quiser proteger o script (Hubs pagos ou privados).
 
-2. ESTRUTURA GERAL DA LIBRARY
+⚠️ Deve ser chamado ANTES de CreateWindow
 
----
+Library:InitKeySystem({
+    Title = "Titanium Key System",
+    Keys = {"key123", "admin2024"},
+    Discord = "https://discord.gg/seuservidor",
+    Info = "Join our Discord to get a key!",
+    OnSuccess = function()
+        print("Access Granted!")
+    end
+})
 
-A library expõe uma tabela principal chamada `Library`.
 
-Funções principais:
+📌 Importante:
 
-* Library:CreateWindow()
-* Window:CreateTab()
-* Tab:CreateButton()
-* Tab:CreateToggle()
-* Tab:CreateSlider()
-* Tab:CreateDropdown()
-* Tab:CreateTextBox()
-* Tab:CreateLabel()
-* Tab:CreateColorPicker()
-* Library:Notification()
+É uma proteção visual (client-side)
 
-Toda a UI é criada seguindo esta hierarquia:
+Para segurança real, use whitelist em servidor externo
 
-Library
-└── Window
-└── Tabs
-└── Components
-
-============================================================
-
-3. WINDOW (JANELA PRINCIPAL)
-
----
-
-A janela é o container principal do menu.
-
-Uso:
-
+🪟 [3] CRIANDO A JANELA PRINCIPAL
 local Window = Library:CreateWindow({
-Title = "Menu Title",
-Author = "Author Name",
-Keybind = Enum.KeyCode.RightControl
+    Title = "Mano Gustavo Hub",
+    Keybind = Enum.KeyCode.RightControl
 })
 
-Parâmetros:
+Recursos da Janela:
 
-* Title (string): Nome do menu
-* Author (string): Nome do autor (opcional)
-* Keybind (Enum.KeyCode): Tecla para abrir/fechar
+Drag & Drop
 
-Suporte:
+Toggle de visibilidade
 
-* PC (tecla)
-* Mobile (botão flutuante arrastável)
+Suporte Mobile (botão flutuante automático)
 
-============================================================
+Tabs laterais
 
-4. TABS (CATEGORIAS)
+🧠 [4] DOIS MODOS DE USO (IMPORTANTE)
+🔹 MODO 1 — SCRIPT SIMPLES
 
----
+Use como uma UI normal (igual V7.9).
 
-Tabs servem para organizar funcionalidades.
+local Tab = Window:CreateTab("Farm")
+Tab:CreateToggle("Auto Farm", function(v) end)
 
-Uso:
 
-local Tab = Window:CreateTab("Category Name")
+✔ Sem Key System
+✔ Sem Game Hub
+✔ Menu direto
 
-Tudo criado usando a variável da tab pertence a ela.
+🔹 MODO 2 — HUB PROFISSIONAL (NOVO)
 
-============================================================
+Usado para scripts multi-jogos.
 
-5. COMPONENTES SUPORTADOS
+local Hub = Window:CreateGameHub("Game Hub")
 
----
 
-Abaixo estão TODOS os componentes suportados atualmente pela library.
+Esse modo cria:
 
----
+Lista de jogos
 
-## A) BUTTON
+Detecção automática por PlaceId
 
-Uso:
+Lista de scripts por jogo
 
-Tab:CreateButton("Button Name", function()
--- Código executado ao clicar
-end)
+🎮 [5] SISTEMA DE GAME HUB (HUB MULTI-JOGOS)
+local Hub = Window:CreateGameHub("Supported Games")
 
-Uso recomendado:
+Hub:AddGame("Blox Fruits", {
+    AutoLoad = true,
+    PlaceIds = {2753915549, 4442272183},
+    Scripts = {
+        {
+            Name = "Auto Farm",
+            Desc = "Automatic farming system",
+            Callback = function()
+                loadstring(game:HttpGet("LINK"))()
+            end
+        }
+    }
+})
 
-* Ações únicas
-* Teleports
-* Testes
+Vantagens:
 
----
+Organização extrema
 
-## B) TOGGLE
+UX profissional
 
-Uso:
+Padrão usado em Hubs pagos
 
-Tab:CreateToggle("Toggle Name", function(State)
--- State = true / false
-end, false)
+Evita menus gigantes
 
-Uso recomendado:
+🗂️ [6] ORGANIZAÇÃO: TABS E SECTIONS
+Criar Aba (Tab)
+local Tab = Window:CreateTab("Combat")
 
-* ESP
-* Hitbox
-* Auto Farm
+Criar Seção (Group / Section)
+local Section = Tab:CreateSection("Aimbot Settings")
 
----
 
-## C) SLIDER
+📌 Tudo criado usando a Section ficará dentro da caixa.
 
-Uso:
+🎛️ [7] COMPONENTES SUPORTADOS
+🔘 Button
+local Btn = Section:CreateButton("Reset", function() end)
+Btn:SetTooltip("Resets your character")
 
-Tab:CreateSlider("Slider Name", Min, Max, Default, function(Value)
-end)
+🔁 Toggle (com Hooks)
+local Toggle = Section:CreateToggle("Auto Farm", function(v) end)
 
-Uso recomendado:
+Toggle:OnEnable(function() end)
+Toggle:OnDisable(function() end)
 
-* Tamanho
-* Velocidade
-* Distância
+🎚️ Slider
+local Slider = Section:CreateSlider("FOV", 50, 500, 100, function(v) end)
 
----
 
-## D) DROPDOWN
+📌 Importante:
+O callback é responsável por sincronizar sua lógica (ex: tamanho do círculo).
 
-Uso:
+📋 Dropdown
+Section:CreateDropdown("Weapon", {"Sword", "Gun"}, function(v) end)
 
-Tab:CreateDropdown("Dropdown Name", {"Option1", "Option2"}, function(Selected)
-end)
+🎨 Color Picker (RGB)
+Section:CreateColorPicker("ESP Color", Color3.fromRGB(255,0,0), function(c) end)
 
-Uso recomendado:
+📝 TextBox
+Section:CreateTextBox("Message", "Type here", function(t) end)
 
-* Seleção de modos
-* Escolha de alvo
+🏷️ Label
+Section:CreateLabel("⚠ Dangerous Area")
 
----
+💬 [8] TOOLTIP SYSTEM
 
-## E) TEXTBOX
+Disponível para todos os componentes.
 
-Uso:
+Element:SetTooltip("This does something important")
 
-Tab:CreateTextBox("Textbox Name", "Placeholder", function(Text)
-end)
 
-Uso recomendado:
+Aparece ao passar o mouse
 
-* Nome de player
-* Valores manuais
+Ignorado automaticamente no mobile
 
----
+💾 [9] SISTEMA DE CONFIG (SAVE / LOAD)
 
-## F) LABEL
+Salva automaticamente:
 
-Uso:
+Toggles
 
-Tab:CreateLabel("--- Section Name ---")
+Sliders
 
-Uso recomendado:
+Dropdowns
 
-* Separação visual
-* Organização
+Color Pickers
 
----
+Library:SaveConfig("Legit")
+Library:LoadConfig("Legit")
+Library:ResetConfig()
 
-## G) COLOR PICKER (RGB)
 
-Uso:
+📌 Observações importantes:
 
-Tab:CreateColorPicker("Color Name", Color3.fromRGB(255,0,0), function(Color)
-end)
+As flags usam o nome do componente
 
-Retorno:
+Evite nomes duplicados
 
-* Color3
-* Atualização em tempo real
+Sistema é client-side (JSON)
 
-Uso recomendado:
+📂 Caminho:
 
-* ESP
-* Chams
-* Hitbox
-* UI Visuals
+workspace/GustavoHub/Configs/
 
-============================================================
+🎨 [10] SISTEMA DE TEMAS (DYNAMIC THEME)
+Library:SetTheme({
+    MainColor = Color3.fromRGB(20,20,20),
+    SecondaryColor = Color3.fromRGB(35,35,35),
+    AccentColor = Color3.fromRGB(255,0,0),
+    TextColor = Color3.fromRGB(255,255,255),
+    SectionColor = Color3.fromRGB(30,30,30)
+})
 
-6. SISTEMA DE NOTIFICAÇÕES
 
----
+✔ Atualiza tudo em tempo real
+✔ Usa Tween suave
+✔ Sistema de registro interno (ThemeRegistry)
 
-Uso:
-
+🔔 [11] NOTIFICAÇÕES
 Library:Notification({
-Title = "Title",
-Text = "Message",
-Duration = 5,
-Type = "Info"
+    Title = "Success",
+    Text = "Config Loaded",
+    Duration = 5,
+    Type = "Success"
 })
 
-Tipos suportados:
 
-* Success
-* Warning
-* Error
-* Info
+Tipos:
 
-============================================================
+Success
 
-7. SISTEMA DE PESQUISA (LUPA)
+Error
 
----
+Warning
 
-A library possui um sistema de busca interno.
+Info
 
-Suporte:
+🧪 [12] BOAS PRÁTICAS
 
-* Buttons
-* Toggles
-* Sliders
-* Dropdowns
-* TextBox
-* Color Picker
-* Labels
+✔ Use Sections
+✔ Evite nomes duplicados
+✔ Centralize lógica fora da UI
+✔ Use callbacks para sincronização
+✔ GameHub só quando necessário
 
-A pesquisa funciona apenas na aba ativa.
+🏁 CONCLUSÃO
 
-============================================================
+Esta library não é mais apenas uma UI.
+Ela é um FRAMEWORK COMPLETO, capaz de:
 
-8. BOAS PRÁTICAS PARA HUMANOS E IAs
+Scripts simples
 
----
+Hubs profissionais
 
-* Sempre use a library externa
-* Nunca recrie a UI manualmente
-* Use Labels para organização
-* Evite loops sem task.wait()
-* Limpe objetos ao desativar toggles
-* Não crie instâncias duplicadas
+Monetização
 
-============================================================
+Organização extrema
 
-9. O QUE A LIBRARY SUPORTA
-
----
-
-* Scripts grandes
-* Hubs completos
-* Player + NPC systems
-* ESP
-* Hitbox
-* Chams
-* Visual customization
-* Mobile + PC
-
-============================================================
-
-# FIM DA DOCUMENTAÇÃO OFICIAL
+Expansão futura
